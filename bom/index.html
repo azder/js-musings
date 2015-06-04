@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title></title>
+
+</head>
+
+<body>
+
+
+<script>
+
+
+    void function (log, error, XHR, parse) {
+
+        var get = function (path, callback) {
+
+            var r = new XHR();
+            r.open('GET', path, true);
+            r.onreadystatechange = function () {
+                if (4 !== r.readyState) {
+                    // ignore unfinished call
+                    return;
+                }
+                if (200 !== r.status) {
+                    error('Error:', r.readyState, r.status, r.statusText, r);
+                    return callback(r, null);
+                }
+                return callback(null, r.responseText);
+            };
+            r.send();
+
+        };
+
+
+        get('bomless.json', function (error, data) {
+            if (error) {
+                return;
+            }
+            log('LESS:', parse(data));
+        });
+
+        get('bomful.json', function (error, data) {
+            if (error) {
+                return;
+            }
+            log('FUL:', parse(data));
+        });
+
+    }(console.log.bind(console), console.error.bind(console), XMLHttpRequest, JSON.parse);
+
+</script>
+
+</body>
+
+</html>
