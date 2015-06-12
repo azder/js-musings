@@ -2,12 +2,8 @@
  * Created by azder on 2015-05-26.
  */
 
-/*
-
- */
-
 // void operator forces it to be FE, so IIFE
-void function (n) {
+void function (print, n) {
 
     'use strict';
 
@@ -24,7 +20,7 @@ void function (n) {
             text += 'Buzz';
         }
 
-        console.log(text ? text : i)
+        print(text ? text : i)
     }
 
-}(100);
+}(console.log.bind(console), 100);
