@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.0.11 (451577)"/><meta name="keywords" content="clip"/><meta name="created" content="2015-06-13 12:01:29 +0000"/><meta name="source" content="Clearly"/><meta name="source-url" content="https://developer.mozilla.org/en-US/docs/Web/API/Storage"/><meta name="updated" content="2015-06-13 12:01:29 +0000"/><title>Storage - Web API Interfaces | MDN</title></head><body><div>
+ <div>
+  <div>
+   <h1>Storage</h1>
+  </div> 
+  <p>The <code>Storage</code> interface of the Web Storage API provides access to the session storage or local storage for a particular domain, allowing you to for example add, modify or delete stored data items.</p> 
+  <p>If you want to manipulate the session storage for a domain, you call <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage" title="The sessionStorage property allows you to access a session Storage object. sessionStorage is similar to localStorage, the only difference is while data stored in localStorage has no expiration set, data stored in sessionStorage gets cleared when the page session ends. A page session lasts for as long as the browser is open and survives over page reloads and restores. Opening a page in a new tab or window will cause a new session to be initiated." target="_blank"><code>Window.sessionStorage</code></a> method; If you want to manipulate the local storage for a domain, you call <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" title="The localStorage property allows you to access a local Storage object. localStorage is similar to sessionStorage. The only difference is that, while data stored in localStorage has no expiration time, data stored in sessionStorage gets cleared when the browsing session ends - that is when the browser is closed." target="_blank"><code>Window.localStorage</code></a>.</p> 
+  <h2>Properties</h2> 
+  <dl><dt>
+    <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage/length" title="The length read-only property of the Storage interface returns an integer representing the number of data items stored in the Storage object." target="_blank"><code>Storage.length</code></a> Read only 
+   </dt><dd>
+    Returns an integer representing the number of data items stored in the 
+    <code>Storage</code> object.
+   </dd></dl> 
+  <h2>Methods</h2> 
+  <dl><dt>
+    <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage/key" title="The key() method of the Storage interface, passed a number n, will return the name of the nth key in the storage." target="_blank"><code>Storage.key()</code></a>
+   </dt><dd>
+    When passed a number n, this method will return the name of the nth key in the storage.
+   </dd></dl> 
+  <dl><dt>
+    <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem" title="The getItem() method of the Storage interface, when passed a key name, will return that key's value." target="_blank"><code>Storage.getItem()</code></a>
+   </dt><dd>
+    When passed a key name, will return that key's value.
+   </dd><dt>
+    <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem" title="The setItem() method of the Storage interface, when passed a key name and value, will add that key to the storage, or update that key's value if it already exists." target="_blank"><code>Storage.setItem()</code></a>
+   </dt><dd>
+    When passed a key name and value, will add that key to the storage, or update that key's value if it already exists.
+   </dd><dt>
+    <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem" title="The removeItem() method of the Storage interface, when passed a key name, will remove that key from the storage." target="_blank"><code>Storage.removeItem()</code></a>
+   </dt><dd>
+    When passed a key name, will remove that key from the storage.
+   </dd><dt>
+    <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage/clear" title="The clear() method of the Storage interface, when invoked, will empty all keys out of the storage." target="_blank"><code>Storage.clear()</code></a>
+   </dt><dd>
+    When invoked, will empty all keys out of the storage.
+   </dd></dl> 
+  <h2>Examples</h2> 
+  <p>Here we access a <code>Storage</code> object by calling <code>localStorage</code>. We first test whether the local storage contains data items using <code>!localStorage.getItem('bgcolor')</code>. If it does, we run a function called <code>setStyles()</code> that grabs the data items using <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/LocalStorage/getItem" title="The documentation about this has not yet been written; please consider contributing!" target="_blank"><code>localStorage.getItem()</code></a> and uses those values to update page styles. If it doesn't, we run another function, <code>populateStorage()</code>, which uses <a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/LocalStorage/setItem" title="The documentation about this has not yet been written; please consider contributing!" target="_blank"><code>localStorage.setItem()</code></a> to set the item values, then runs <code>setStyles()</code>.</p> 
+  <pre><code>localStoragegetItem'bgcolor' 
+  populateStorage
+  
+  setStyles
+
+
+function populateStorage 
+  localStoragesetItem'bgcolor' documentgetElementById'bgcolor'value
+  localStoragesetItem'font' documentgetElementById'font'value
+  localStoragesetItem'image' documentgetElementById'image'value
+
+  setStyles
+
+
+function setStyles 
+   currentColor  localStoragegetItem'bgcolor'
+   currentFont  localStoragegetItem'font'
+   currentImage  localStoragegetItem'image'
+
+  documentgetElementById'bgcolor'value  currentColor
+  documentgetElementById'font'value  currentFont
+  documentgetElementById'image'value  currentImage
+
+  htmlElemstylebackgroundColor    currentColor
+  pElemstylefontFamily  currentFont
+  imgElemsetAttribute'src' currentImage
+</code></pre> 
+  <div> 
+   <p><strong>Note</strong>: To see this running as a complete working example, see our <a shape="rect" href="https://github.com/mdn/web-storage-demo" target="_blank">Web Storage Demo</a>.</p> 
+  </div> 
+  <h2>Specifications</h2> 
+  <table><tr><th colspan="1" rowspan="1">Specification</th><th colspan="1" rowspan="1">Status</th><th colspan="1" rowspan="1">Comment</th></tr><tr><td colspan="1" rowspan="1"><a shape="rect" href="http://dev.w3.org/html5/webstorage/#the-storage-interface" target="_blank">Web Storage<br clear="none"/><small>The definition of 'Storage' in that specification.</small></a></td><td colspan="1" rowspan="1">Recommendation</td><td colspan="1" rowspan="1"> </td></tr></table> 
+  <h2>Browser compatibility</h2> 
+  <div> 
+   <ul><li><a shape="rect" target="_blank">Desktop</a></li><li><a shape="rect" target="_blank">Mobile</a></li></ul> 
+   <div> 
+    <table><tr><th colspan="1" rowspan="1">Feature</th><th colspan="1" rowspan="1">Chrome</th><th colspan="1" rowspan="1">Firefox (Gecko)</th><th colspan="1" rowspan="1">Internet Explorer</th><th colspan="1" rowspan="1">Opera</th><th colspan="1" rowspan="1">Safari (WebKit)</th></tr><tr><td colspan="1" rowspan="1">localStorage</td><td colspan="1" rowspan="1">4</td><td colspan="1" rowspan="1">3.5</td><td colspan="1" rowspan="1">8</td><td colspan="1" rowspan="1">10.50</td><td colspan="1" rowspan="1">4</td></tr><tr><td colspan="1" rowspan="1">sessionStorage</td><td colspan="1" rowspan="1">5</td><td colspan="1" rowspan="1">2</td><td colspan="1" rowspan="1">8</td><td colspan="1" rowspan="1">10.50</td><td colspan="1" rowspan="1">4</td></tr></table> 
+   </div>
+  </div>
+  <p>All browsers have varying capacity levels for both localStorage and sessionStorage. Here is a <a shape="rect" href="http://dev-test.nemikor.com/web-storage/support-test/" title="http://dev-test.nemikor.com/web-storage/support-test/" target="_blank">detailed rundown of all the storage capacities for various browsers</a>.</p> 
+  <div> 
+   <p><strong>Note: </strong>since iOS 5.1, Safari Mobile stores localStorage data in the cache folder, which is subject to occasional clean up, at the behest of the OS, typically if space is short.</p> 
+  </div> 
+  <h2>See also</h2> 
+  <p><a shape="rect" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API" target="_blank">Using the Web Storage API</a></p> 
+ </div>
+</div></body></html>
