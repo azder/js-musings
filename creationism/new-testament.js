@@ -19,8 +19,8 @@ class Person {
     }
 }
 
-const adam = new Person('Adam', 0.002737907006989);
-const eve = new Person('Eve', 2 * 0.002737907006989);
+const adam = new Person('Adam', 2 * 0.002737907006989);
+const eve = new Person('Eve', 0.002737907006989);
 
 adam.greet();
 eve.greet();

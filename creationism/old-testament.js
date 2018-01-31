@@ -14,8 +14,8 @@ Person.prototype = {
     }
 };
 
-var adam = new Person('Adam', 0.002737907006989);
-var eve = new Person('Eve', 2 * 0.002737907006989);
+var adam = new Person('Adam', 2 * 0.002737907006989);
+var eve = new Person('Eve', 0.002737907006989);
 
 adam.greet();
 eve.greet();

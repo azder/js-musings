@@ -5,43 +5,45 @@ const Human = options => {
 };
 
 
-const Person = (() => {
+const Person = (
+    (() => {
 
-    const eat = (
-        function eat(what) {
-            console.log(this.name, 'eats', what)
-        }
-    );
+        const eat = (
+            function Person$eat(what) {
+                console.log(this.name, 'eats', what)
+            }
+        );
 
-    return (
-        options => {
+        return (
+            options => {
 
-            const self = Object();
+                const $ = Object();
 
-            self.name = options && ('' + options.name);
-            self.age = options && (options.age - 0);
+                $.name = options && ('' + options.name);
+                $.age = options && (options.age - 0);
 
-            self.greet = (
-                () => console.log('hello I am', self.name, 'and I have', self.age, 'years')
-            );
+                $.greet = (
+                    () => console.log('hello I am', $.name, 'and I have', $.age, 'years')
+                );
 
-            self.eat = eat;
+                $.eat = eat;
 
-            return self;
+                return $;
 
-        }
-    );
+            }
+        );
 
-})();
+    })()
+);
 
 const adam = Person({
     name: 'Adam',
-    age:  0.002737907006989,
+    age:  2 * 0.002737907006989,
 });
 
 const eve = Person({
     name: 'Eve',
-    age:  2 * 0.002737907006989,
+    age:  0.002737907006989,
 });
 
 adam.greet();
