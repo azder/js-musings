@@ -35,6 +35,8 @@ const X$unshift = (
     ($, item) => [item, ...$]
 );
 
+const X$protadd = X$push;
+
 const X$first = (
     ($) => ($[0])
 );
@@ -66,20 +68,20 @@ const X$props2str = (
     ($) => $[_keys_].map(key => ('' + key + ':' + $[key]))
 );
 
+const X$proto2str = (
+    ($) => X$last($[_protos_]).name //$[_protos_].map(p => p.name) //X$first($[_protos_]).name
+);
+
 const X$object2str = (
-    ($) => '' + X$first($[_protos_]).name + ':{' + X$props2str($) + '}'
+    ($) => '' + X$proto2str($) + ':𝜔{' + X$props2str($) + '}𝜔'
 );
 
 const X$array2str = (
-    ($) => '' + X$first($[_protos_]).name + ':[' + X$props2str($) + ']'
+    ($) => '' + X$proto2str($) + ':𝛼[' + X$props2str($) + ']𝛼'
 );
 
 const X$function2str = (
-    ($) => '' + X$first($[_protos_]).name + ':(' + $[_call_] + '){' + X$props2str($) + '}'
-);
-
-const X$createFunction = (
-    ($) => ({...$})
+    ($) => '' + X$proto2str($) + ':𝜆{' + $[_call_] + ',' + X$props2str($) + '}𝜆'
 );
 
 const X$Object = ((() => {
@@ -114,7 +116,7 @@ const X$Null = ((() => {
         function X$Null($, ...$$) {
 
             $ = X$Object($, ...$$);
-            $[_protos_] = X$unshift($[_protos_], X$Null);
+            $[_protos_] = X$protadd($[_protos_], X$Null);
             $[_null_] = _true_;
             return $;
 
@@ -130,7 +132,7 @@ const X$Array = ((() => {
         function X$Array($, ...$$) {
 
             $ = X$Object($, ...$$);
-            $[_protos_] = X$unshift($[_protos_], X$Array);
+            $[_protos_] = X$protadd($[_protos_], X$Array);
             $[_2str_] = X$array2str;
             return $;
 
@@ -147,7 +149,7 @@ const X$Function = ((() => {
         function X$Function($, ...$$) {
 
             $ = X$Object($, ...$$);
-            $[_protos_] = X$unshift($[_protos_], X$Function);
+            $[_protos_] = X$protadd($[_protos_], X$Function);
             $[_2str_] = X$function2str;
             $[_call_] = $;
             return $;
