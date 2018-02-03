@@ -9,11 +9,12 @@ const _props_ = Symbol('_props_');
 const _metas_ = Symbol('_metas_');
 const _length_ = Symbol('_length_');
 
+const _mutas_ = Symbol('_mutas_');
 const _key_ = Symbol('_key_');
 const _val_ = Symbol('_val_');
 
 
-const X$Create = (
+const X$O = (
     () => Object.create(null)
 );
 
@@ -44,8 +45,6 @@ const X$push = (
 const X$unshift = (
     ($, item) => [item, ...$]
 );
-
-const X$padd = X$push;
 
 const X$first = (
     ($) => ($[0])
@@ -88,6 +87,16 @@ const X$mget = (
     }
 );
 
+const X$call = (
+    (f, $, ...$$) => {
+        return f.call($, $, ...$$);
+    }
+);
+
+const X$padd = (
+    ($, proto) => X$push(X$mget($, _protos_), proto)
+);
+
 const X$length = (
     ($) => $[_props_].length
 );
@@ -96,21 +105,15 @@ const X$props2str = (
     ($) => X$mget($, _props_).map(k => ('' + k + ':' + $[k]))
 );
 
-const X$props2arr = (
-    ($) => X$mget($, _props_).map(k => ({[k]: $[k]}))
-);
-
-
-const X$p2str = (
+const X$protos2str = (
     ($) => {
 
         const s = X$second(X$mget($, _protos_));
+        const l = X$last(X$mget($, _protos_));
 
-        if (s === X$Arr || s === X$Fun || s === X$Nil) {
+        if (s === l && (s === X$Arr || s === X$Fun || s === X$Nil)) {
             return '';
         }
-
-        const l = X$last(X$mget($, _protos_));
 
         return l === X$Obj ? '' : '' + l.name + ':';
 
@@ -118,23 +121,22 @@ const X$p2str = (
 );
 
 const X$obj2str = (
-    ($) => '' + X$p2str($) + '𝜔{' + X$props2str($) + '}𝜔'
+    ($) => '' + X$protos2str($) + '𝜔{' + X$props2str($) + '}𝜔'
 );
 
 const X$arr2str = (
-    ($) => '' + X$p2str($) + '𝛼[' + X$props2arr($) + ']𝛼'
+    ($) => '' + X$protos2str($) + '𝛼[' + X$props2str($) + ']𝛼'
 );
 
 const X$fun2str = (
-    ($) => '' + X$p2str($) + '𝜆{(' + X$mget($, _call_) + '),' + X$props2str($) + '}𝜆'
+    ($) => '' + X$protos2str($) + '𝜆{(' + X$mget($, _call_) + '),' + X$props2str($) + '}𝜆'
 );
 
 const X$nil2str = (
-    ($) => '' + X$p2str($) + '𝜈{' + X$props2str($) + '}𝜈'
+    ($) => '' + X$protos2str($) + '𝜈{' + X$props2str($) + '}𝜈'
 );
 
-
-X$metas = {
+const X$metas = {
     [_2str_]:   X$obj2str,
     [_call_]:   X$frozen,
     [_length_]: X$length,
@@ -142,79 +144,78 @@ X$metas = {
     [_protos_]: []
 };
 
-const X$Obj = (
-
-    function Obj($, ...$$) {
-
-        $[_metas_] = [];
-
-        X$mset($, _props_, []);
-        X$mset($, _protos_, [Obj]);
-
-        return $$.reduce(
-            ($, {[_key_]: k, [_val_]: v}) => X$pset($, k, v),
-            $,
-        );
-
-    }
-
-);
-
-const X$Nil = (
-
-    function Nil($, ...$$) {
-
-        $ = X$Obj($, ...$$);
-
-        X$mset($, _protos_, X$padd(X$mget($, _protos_), Nil));
-        X$mset($, _2str_, X$nil2str);
-        X$mset($, _null_, _true_);
-
-        return $;
-
+const X$c = (
+    ($) => {
+        $[_metas_] = X$O();
+        return X$mset($, _mutas_, {
+            pset: X$pset,
+            mset: X$mset,
+        });
     }
 );
 
-const X$Arr = (
 
-    function Arr($, ...$$) {
+const X$Obj = X$c(function Obj($, ...$$) {
 
-        $ = X$Obj($, ...$$);
+    const {mset, pset} = Obj[_metas_][_mutas_];
 
-        X$mset($, _protos_, X$padd(X$mget($, _protos_), Arr));
-        X$mset($, _2str_, X$arr2str);
+    $[_metas_] = X$O();
 
-        return $;
+    mset($, _props_, []);
+    mset($, _protos_, [Obj]);
 
-    }
+    return $$.reduce(
+        ($, {[_key_]: k, [_val_]: v}) => pset($, k, v),
+        $,
+    );
 
-);
+});
 
-const X$Fun = (
+const X$Nil = X$c(function Nil($, ...$$) {
 
-    function Fun($, ...$$) {
+    const {mset} = Nil[_metas_][_mutas_];
 
-        $ = X$Obj($, ...$$);
+    $ = X$Obj($, ...$$);
 
-        X$mset($, _protos_, X$padd(X$mget($, _protos_), Fun));
-        X$mset($, _2str_, X$fun2str);
+    mset($, _protos_, X$padd($, Nil));
+    mset($, _2str_, X$nil2str);
+    mset($, _null_, _true_);
 
-        X$mset($, _call_, $);
+    return $;
 
-        return $;
+});
 
-    }
+const X$Arr = X$c(function Arr($, ...$$) {
 
-);
+    const {mset} = Arr[_metas_][_mutas_];
 
+    $ = X$Obj($, ...$$);
 
-const X$constructor = (
-    (C$) => ($, ...$$) => C$.call($, {pset: X$pset, mset: X$mset}, $, ...$$)
-);
+    mset($, _protos_, X$padd($, Arr));
+    mset($, _2str_, X$arr2str);
+
+    return $;
+
+});
+
+const X$Fun = X$c(function Fun($, ...$$) {
+
+    const {mset} = Fun[_metas_][_mutas_];
+
+    $ = X$Obj($, ...$$);
+
+    mset($, _protos_, X$padd($, Fun));
+    mset($, _2str_, X$fun2str);
+
+    mset($, _call_, $);
+
+    return $;
+
+});
 
 
 const X$ = X$Obj(
-    X$Create(),
+    X$O(),
 
     {[_key_]: 'Obj', [_val_]: X$Obj},
     {[_key_]: 'Nil', [_val_]: X$Nil},
@@ -223,12 +224,16 @@ const X$ = X$Obj(
 
     {[_key_]: 'pget', [_val_]: X$pget},
     {[_key_]: 'mget', [_val_]: X$mget},
+    {[_key_]: 'call', [_val_]: X$call},
+    {[_key_]: 'padd', [_val_]: X$padd},
 
-    {[_key_]: 'C', [_val_]: X$Create},
-    {[_key_]: 'c', [_val_]: X$constructor},
+    {[_key_]: 'O', [_val_]: X$O},
+    {[_key_]: 'c', [_val_]: X$c},
 
     {[_key_]: '_protos_', [_val_]: _protos_},
     {[_key_]: '_props_', [_val_]: _props_},
+    {[_key_]: '_metas_', [_val_]: _metas_},
+    {[_key_]: '_mutas_', [_val_]: _mutas_},
     {[_key_]: '_2str_', [_val_]: _2str_},
     {[_key_]: '_call_', [_val_]: _call_},
     {[_key_]: '_key_', [_val_]: _key_},
